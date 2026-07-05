@@ -1,0 +1,41 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import TrackTable from "@/components/TrackTable.astro";
+import { site } from "@/data/site";
+import { tracks } from "@/data/tracks";
+---
+
+<BaseLayout
+  title={`Roblox Music IDs & Boombox Codes - ${site.name}`}
+  description="Search BloxBGM's Roblox music ID table by title, genre, mood, status, or audio ID."
+  canonical={`${site.url}/codes`}
+>
+  <Header />
+  <main id="main" class="container py-12">
+    <div class="mb-8 max-w-3xl">
+      <p class="text-sm font-black uppercase tracking-[0.16em] text-volt">Music ID Table</p>
+      <h1 class="mt-3 text-4xl font-black tracking-normal md:text-6xl">Roblox Music IDs & Boombox Codes</h1>
+      <p class="mt-5 text-lg leading-8 text-white/68">
+        Search by song, mood, genre, play style, or ID. Candidate means the ID is source-listed and still needs a fresh in-game boombox check.
+      </p>
+    </div>
+    <TrackTable tracks={tracks} />
+    <section class="mt-8 grid gap-4 md:grid-cols-3">
+      <div class="panel rounded-lg p-5">
+        <h2 class="text-lg font-black">Status labels</h2>
+        <p class="mt-2 text-sm leading-6 text-white/62">Verified IDs have a checked date. Candidate IDs are useful leads but should be tested before relying on them.</p>
+      </div>
+      <div class="panel rounded-lg p-5">
+        <h2 class="text-lg font-black">Copy workflow</h2>
+        <p class="mt-2 text-sm leading-6 text-white/62">Use the copy button, then paste the numeric ID into a Roblox experience that supports boombox or radio audio.</p>
+      </div>
+      <div class="panel rounded-lg p-5">
+        <h2 class="text-lg font-black">Updates</h2>
+        <p class="mt-2 text-sm leading-6 text-white/62">Unavailable IDs should be kept in the dataset as history, then filtered down in the public table.</p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

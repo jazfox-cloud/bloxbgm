@@ -1,0 +1,45 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import TrackTable from "@/components/TrackTable.astro";
+import { site } from "@/data/site";
+import { getPlaylistTracks, playlists } from "@/data/playlists";
+
+export function getStaticPaths() {
+  return playlists.map((playlist) => ({
+    params: { slug: playlist.slug },
+    props: { playlist }
+  }));
+}
+
+const { playlist } = Astro.props;
+const playlistTracks = getPlaylistTracks(playlist.trackIds);
+---
+
+<BaseLayout
+  title={`${playlist.title} Roblox Music IDs - ${site.name}`}
+  description={`${playlist.description} Copy Roblox audio IDs for ${playlist.useCase.toLowerCase()}`}
+  canonical={`${site.url}/playlists/${playlist.slug}`}
+>
+  <Header />
+  <main id="main" class="container py-12">
+    <div class="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
+      <div>
+        <p class="text-sm font-black uppercase tracking-[0.16em] text-volt">{playlist.eyebrow}</p>
+        <h1 class="mt-3 text-4xl font-black tracking-normal md:text-6xl">{playlist.title} Roblox Music IDs</h1>
+        <p class="mt-5 max-w-3xl text-lg leading-8 text-white/68">{playlist.description}</p>
+      </div>
+      <aside class="panel rounded-lg p-5">
+        <p class="text-sm font-black uppercase tracking-wide text-pulse">Playlist Notes</p>
+        <p class="mt-3 text-sm leading-6 text-white/64">{playlist.useCase}</p>
+        <p class="mt-4 text-xs font-bold text-white/44">Updated {playlist.updatedDate}</p>
+      </aside>
+    </div>
+
+    <section class="mt-8">
+      <TrackTable tracks={playlistTracks} />
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { site } from "@/data/site";
+---
+
+<BaseLayout title={`Terms - ${site.name}`} description="BloxBGM terms of use." canonical={`${site.url}/terms`}>
+  <Header />
+  <main id="main" class="container py-12">
+    <article class="prose prose-invert max-w-3xl prose-headings:font-black prose-a:text-pulse">
+      <h1>Terms of Use</h1>
+      <p>Last updated: July 5, 2026.</p>
+      <p>BloxBGM is an independent reference site for Roblox music IDs and playlists. Roblox and related marks belong to Roblox Corporation.</p>
+      <h2>Accuracy</h2>
+      <p>Music IDs can stop working because of moderation, permissions, or individual game settings. BloxBGM provides references and labels verification status, but availability is not guaranteed.</p>
+      <h2>Acceptable Use</h2>
+      <p>Do not use BloxBGM to bypass Roblox rules, upload unauthorized audio, or misrepresent ownership of music assets.</p>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>

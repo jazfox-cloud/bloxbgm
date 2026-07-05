@@ -1,0 +1,22 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { site } from "@/data/site";
+---
+
+<BaseLayout title={`Privacy Policy - ${site.name}`} description="BloxBGM privacy policy." canonical={`${site.url}/privacy-policy`}>
+  <Header />
+  <main id="main" class="container py-12">
+    <article class="prose prose-invert max-w-3xl prose-headings:font-black prose-a:text-pulse">
+      <h1>Privacy Policy</h1>
+      <p>Last updated: July 5, 2026.</p>
+      <p>BloxBGM does not require accounts, collect passwords, or ask for Roblox credentials.</p>
+      <h2>Analytics and Ads</h2>
+      <p>Future analytics or advertising tools may collect standard browser, device, and usage information. Any production integration should be disclosed here before launch.</p>
+      <h2>Contact</h2>
+      <p>For privacy questions, contact the site owner through the channel published on the live site.</p>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,173 @@
+---
+import type { Track } from "@/data/tracks";
+
+interface Props {
+  tracks: Track[];
+  compact?: boolean;
+}
+
+const { tracks, compact = false } = Astro.props;
+---
+
+<div class="panel overflow-hidden rounded-lg" data-track-widget>
+  <div class="grid gap-3 border-b border-white/10 p-4 md:grid-cols-[1fr_180px_160px]">
+    <label class="block">
+      <span class="sr-only">Search tracks</span>
+      <input
+        class="w-full rounded-md border border-white/10 bg-white/8 px-4 py-3 text-sm text-white outline-none ring-0 placeholder:text-white/36 focus:border-pulse"
+        type="search"
+        data-track-search
+        placeholder="Search title, genre, mood, ID..."
+      />
+    </label>
+    <select class="rounded-md border border-white/10 bg-[#14151d] px-4 py-3 text-sm text-white outline-none focus:border-pulse" data-genre-filter aria-label="Filter by genre">
+      <option value="">All genres</option>
+      <option value="phonk">Phonk</option>
+      <option value="hype">Hype</option>
+      <option value="chill">Chill</option>
+      <option value="ambient">Ambient</option>
+      <option value="meme">Meme</option>
+      <option value="classic">Classic</option>
+    </select>
+    <select class="rounded-md border border-white/10 bg-[#14151d] px-4 py-3 text-sm text-white outline-none focus:border-pulse" data-status-filter aria-label="Filter by status">
+      <option value="">All statuses</option>
+      <option value="verified">Verified</option>
+      <option value="candidate">Candidate</option>
+      <option value="unavailable">Unavailable</option>
+    </select>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full border-collapse text-left text-sm">
+      <thead class="bg-white/5 text-xs uppercase tracking-wide text-white/48">
+        <tr>
+          <th class="px-4 py-3">Track</th>
+          <th class="px-4 py-3">ID</th>
+          <th class="px-4 py-3">Genre</th>
+          <th class="px-4 py-3">Status</th>
+          {!compact && <th class="px-4 py-3">Best For</th>}
+          <th class="px-4 py-3">Action</th>
+        </tr>
+      </thead>
+      <tbody data-track-list>
+        {tracks.map((track) => (
+          <tr
+            class="border-t border-white/8 align-top"
+            data-track-row
+            data-search={`${track.title} ${track.artist} ${track.id} ${track.genre} ${track.mood.join(" ")} ${track.bestFor.join(" ")}`.toLowerCase()}
+            data-genre={track.genre}
+            data-status={track.status}
+          >
+            <td class="px-4 py-4">
+              <div class="font-bold text-white">{track.title}</div>
+              <div class="mt-1 text-xs text-white/48">{track.artist}</div>
+            </td>
+            <td class="px-4 py-4 font-mono text-pulse">{track.id}</td>
+            <td class="px-4 py-4 capitalize text-white/74">{track.genre}</td>
+            <td class="px-4 py-4">
+              <span class:list={[
+                "rounded-full px-2.5 py-1 text-xs font-black uppercase",
+                track.status === "verified" ? "bg-volt text-ink" : "bg-white/10 text-white/64"
+              ]}>
+                {track.status}
+              </span>
+            </td>
+            {!compact && <td class="px-4 py-4 text-white/64">{track.bestFor.join(", ")}</td>}
+            <td class="px-4 py-4">
+              <button class="rounded-md border border-white/12 px-3 py-2 text-xs font-black text-white transition hover:border-pulse hover:text-pulse" type="button" data-copy-id={track.id}>
+                Copy ID
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="hidden p-5 text-sm text-white/54" data-empty-state>No matching tracks found.</p>
+</div>
+
+<script>
+  function initTrackTables() {
+    async function copyText(value: string) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await Promise.race([
+            navigator.clipboard.writeText(value),
+            new Promise((_, reject) => {
+              window.setTimeout(() => reject(new Error("Clipboard timed out")), 250);
+            })
+          ]);
+          return true;
+        }
+      } catch {
+        // Fall through to the textarea fallback for browsers without clipboard permission.
+      }
+
+      const textarea = document.createElement("textarea");
+      textarea.value = value;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand("copy");
+      textarea.remove();
+      return copied;
+    }
+
+    document.querySelectorAll("[data-track-widget]").forEach((widget) => {
+      if (!(widget instanceof HTMLElement) || widget.dataset.ready === "true") return;
+      widget.dataset.ready = "true";
+
+      const searchInput = widget.querySelector("[data-track-search]");
+      const genreFilter = widget.querySelector("[data-genre-filter]");
+      const statusFilter = widget.querySelector("[data-status-filter]");
+      const rows = Array.from(widget.querySelectorAll("[data-track-row]"));
+      const emptyState = widget.querySelector("[data-empty-state]");
+
+      function filterRows() {
+        const query = searchInput instanceof HTMLInputElement ? searchInput.value.trim().toLowerCase() : "";
+        const genre = genreFilter instanceof HTMLSelectElement ? genreFilter.value : "";
+        const status = statusFilter instanceof HTMLSelectElement ? statusFilter.value : "";
+        let shown = 0;
+
+        rows.forEach((row) => {
+          if (!(row instanceof HTMLElement)) return;
+          const matchesQuery = !query || row.dataset.search?.includes(query);
+          const matchesGenre = !genre || row.dataset.genre === genre;
+          const matchesStatus = !status || row.dataset.status === status;
+          const visible = Boolean(matchesQuery && matchesGenre && matchesStatus);
+          row.hidden = !visible;
+          if (visible) shown += 1;
+        });
+
+        if (emptyState instanceof HTMLElement) {
+          emptyState.classList.toggle("hidden", shown !== 0);
+        }
+      }
+
+      searchInput?.addEventListener("input", filterRows);
+      genreFilter?.addEventListener("change", filterRows);
+      statusFilter?.addEventListener("change", filterRows);
+
+      widget.querySelectorAll("[data-copy-id]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          if (!(button instanceof HTMLButtonElement)) return;
+          const id = button.dataset.copyId;
+          if (!id) return;
+          const copied = await copyText(id);
+          const original = button.textContent;
+          button.textContent = copied ? "Copied" : "Copy failed";
+          window.setTimeout(() => {
+            button.textContent = original;
+          }, 1200);
+        });
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTrackTables, { once: true });
+  } else {
+    initTrackTables();
+  }
+</script>

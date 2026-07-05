@@ -1,0 +1,24 @@
+---
+import { site } from "@/data/site";
+---
+
+<footer class="mt-16 border-t border-white/10 bg-ink/70">
+  <div class="container grid gap-8 py-10 md:grid-cols-[1fr_auto] md:items-start">
+    <div>
+      <div class="flex items-center gap-3">
+        <img class="h-7 w-7" src="/favicon.svg" alt="" width="28" height="28" />
+        <span class="font-black">{site.name}</span>
+      </div>
+      <p class="mt-3 max-w-2xl text-sm leading-6 text-white/62">
+        BloxBGM is an independent Roblox music ID reference. Roblox and related marks belong to Roblox Corporation.
+        Music availability can change, so candidate IDs should be checked in your own boombox environment.
+      </p>
+    </div>
+    <nav class="grid gap-2 text-sm text-white/72" aria-label="Footer navigation">
+      <a class="hover:text-white" href="/codes">Music IDs</a>
+      <a class="hover:text-white" href="/how-to-use">How to Use</a>
+      <a class="hover:text-white" href="/privacy-policy">Privacy</a>
+      <a class="hover:text-white" href="/terms">Terms</a>
+    </nav>
+  </div>
+</footer>

@@ -1,0 +1,23 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { site } from "@/data/site";
+---
+
+<BaseLayout title={`About - ${site.name}`} description={site.dataPolicy} canonical={`${site.url}/about`}>
+  <Header />
+  <main id="main" class="container py-12">
+    <section class="max-w-3xl">
+      <p class="text-sm font-black uppercase tracking-[0.16em] text-volt">About</p>
+      <h1 class="mt-3 text-4xl font-black tracking-normal md:text-6xl">About BloxBGM</h1>
+      <p class="mt-5 text-lg leading-8 text-white/68">
+        BloxBGM organizes Roblox music IDs by how players use them: fast runs, PvP, building, roleplay, hangouts, and meme moments.
+      </p>
+      <p class="mt-5 text-lg leading-8 text-white/68">
+        The project keeps a clear split between IDs that are only source-listed and IDs checked in a Roblox boombox environment.
+      </p>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
