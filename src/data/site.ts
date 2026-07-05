@@ -1,7 +1,7 @@
 export const site = {
   name: "BloxBGM",
-  domain: "rbloxbgm.com",
-  url: "https://rbloxbgm.com",
+  domain: "bloxbgm.com",
+  url: "https://bloxbgm.com",
   tagline: "Roblox music IDs organized by play style.",
   description:
     "Search Roblox music IDs and browse scenario-based BGM playlists for speedruns, PvP, building, tycoon, and hangout games.",
