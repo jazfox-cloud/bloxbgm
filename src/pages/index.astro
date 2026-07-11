@@ -23,8 +23,8 @@ const featuredTracks = tracks.slice(0, 8);
           Search Roblox music IDs and pick BGM by scene: speedrun, PvP, building, tycoon, hangout, and roleplay.
         </p>
         <div class="mt-7 flex flex-wrap gap-3">
-          <a class="rounded-md bg-volt px-5 py-3 font-black text-ink transition hover:bg-white" href="/codes">Search music IDs</a>
-          <a class="rounded-md border border-white/14 px-5 py-3 font-black text-white transition hover:border-pulse hover:text-pulse" href="/playlists/speedrun-phonk">Browse playlists</a>
+          <a class="rounded-md bg-volt px-5 py-3 font-black text-ink transition hover:bg-white" href="/codes/">Search music IDs</a>
+          <a class="rounded-md border border-white/14 px-5 py-3 font-black text-white transition hover:border-pulse hover:text-pulse" href="/playlists/speedrun-phonk/">Browse playlists</a>
         </div>
         <dl class="mt-8 grid max-w-2xl grid-cols-3 gap-3">
           <div class="panel rounded-lg p-4">
@@ -56,7 +56,7 @@ const featuredTracks = tracks.slice(0, 8);
           <p class="text-sm font-black uppercase tracking-[0.16em] text-pulse">Quick Search</p>
           <h2 class="mt-2 text-3xl font-black">Featured Roblox Music IDs</h2>
         </div>
-        <a class="hidden text-sm font-black text-volt hover:text-white md:inline" href="/codes">View all</a>
+        <a class="hidden text-sm font-black text-volt hover:text-white md:inline" href="/codes/">View all</a>
       </div>
       <TrackTable tracks={featuredTracks} compact />
     </section>
@@ -68,7 +68,7 @@ const featuredTracks = tracks.slice(0, 8);
       </div>
       <div class="grid gap-4 md:grid-cols-3">
         {playlists.map((playlist) => (
-          <a class="panel rounded-lg p-5 transition hover:-translate-y-1 hover:border-pulse/70" href={`/playlists/${playlist.slug}`}>
+          <a class="panel rounded-lg p-5 transition hover:-translate-y-1 hover:border-pulse/70" href={`/playlists/${playlist.slug}/`}>
             <p class="text-xs font-black uppercase tracking-wide text-volt">{playlist.eyebrow}</p>
             <h3 class="mt-3 text-xl font-black">{playlist.title}</h3>
             <p class="mt-3 text-sm leading-6 text-white/62">{playlist.description}</p>

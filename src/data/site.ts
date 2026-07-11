@@ -14,3 +14,9 @@ export const site = {
     phaseThree: ["Premium downloadable playlist packs", "Lightweight API/data licensing"]
   }
 };
+
+export function pageUrl(path = "/") {
+  if (path === "/" || path === "") return site.url;
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `${site.url}${normalizedPath.endsWith("/") ? normalizedPath : `${normalizedPath}/`}`;
+}

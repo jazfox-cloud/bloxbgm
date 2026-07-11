@@ -2,13 +2,13 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import { site } from "@/data/site";
+import { pageUrl, site } from "@/data/site";
 ---
 
 <BaseLayout
   title={`How to Use Roblox Music IDs - ${site.name}`}
   description="A concise guide to using Roblox music IDs in boombox, radio, and music-enabled Roblox experiences."
-  canonical={`${site.url}/how-to-use`}
+  canonical={pageUrl("/how-to-use/")}
 >
   <Header />
   <main id="main" class="container py-12">
