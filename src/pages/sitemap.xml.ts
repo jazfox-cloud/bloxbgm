@@ -1,7 +1,7 @@
 import { playlists } from "@/data/playlists";
 import { pageUrl, site } from "@/data/site";
 
-const staticRoutes = ["/", "/codes/", "/how-to-use/", "/about/", "/privacy-policy/", "/terms/"];
+const staticRoutes = ["/", "/codes/", "/how-to-use/", "/about/", "/contact/", "/privacy-policy/", "/terms/"];
 
 export function GET() {
   const playlistRoutes = playlists.map((playlist) => `/playlists/${playlist.slug}/`);

@@ -1,0 +1,9 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { pageUrl, site } from "@/data/site";
+---
+<BaseLayout title={`Contact - ${site.name}`} description="Contact BloxBGM about audio ID corrections, sources, privacy, or accessibility." canonical={pageUrl("/contact/")}>
+  <Header /><main id="main" class="container py-12"><article class="prose prose-invert max-w-3xl prose-headings:font-black prose-a:text-pulse"><h1>Contact BloxBGM</h1><p>Email <a href="mailto:hello@bloxbgm.com">hello@bloxbgm.com</a> for track ID corrections, source suggestions, privacy requests, accessibility reports, or general feedback.</p><p>For a correction, include the page URL, audio ID, what appears to be wrong, and an official Roblox audio page or other reliable source. BloxBGM does not host music files, sell audio, or provide Roblox account support.</p><p>BloxBGM is an independent fan site and is not affiliated with Roblox Corporation, artists, labels, or game developers.</p></article></main><Footer />
+</BaseLayout>
