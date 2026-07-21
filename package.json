@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
-    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "seo:audit": "node scripts/seo-audit.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

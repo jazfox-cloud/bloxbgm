@@ -19,7 +19,7 @@ const playlistTracks = getPlaylistTracks(playlist.trackIds);
 
 <BaseLayout
   title={`${playlist.title} Roblox Music IDs - ${site.name}`}
-  description={`${playlist.description} Copy Roblox audio IDs for ${playlist.useCase.toLowerCase()}`}
+  description={playlist.metaDescription}
   canonical={pageUrl(`/playlists/${playlist.slug}/`)}
 >
   <Header />
