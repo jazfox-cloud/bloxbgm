@@ -1,0 +1,170 @@
+---
+const measurementId = "G-NSEMR2NQQY";
+const productionHost = "bloxbgm.com";
+---
+
+<div
+  class="analytics-consent"
+  data-analytics-consent
+  hidden
+  role="dialog"
+  aria-live="polite"
+  aria-label="Analytics choices"
+>
+  <div>
+    <p class="analytics-consent__title">Analytics choices</p>
+    <p class="analytics-consent__text">
+      BloxBGM uses Google Analytics only after consent to measure page visits and aggregate content usage. Ads consent stays off here.
+    </p>
+  </div>
+  <div class="analytics-consent__actions">
+    <button type="button" data-analytics-reject>Reject</button>
+    <button type="button" data-analytics-accept>Accept analytics</button>
+  </div>
+</div>
+
+<script is:inline define:vars={{ measurementId, productionHost }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  window.gtag = gtag;
+  gtag("consent", "default", {
+    analytics_storage: "denied",
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    wait_for_update: 500
+  });
+
+  (() => {
+    const choiceKey = "bloxbgm_analytics_consent";
+    const scriptId = "bloxbgm-google-tag";
+    const allowedHost = window.location.hostname === productionHost;
+    const banner = document.querySelector("[data-analytics-consent]");
+    const acceptButtons = document.querySelectorAll("[data-analytics-accept]");
+    const rejectButtons = document.querySelectorAll("[data-analytics-reject]");
+    const reopenButtons = document.querySelectorAll("[data-analytics-open]");
+    const trackedEvents = new WeakSet();
+
+    function consentState() {
+      try {
+        return window.localStorage.getItem(choiceKey);
+      } catch {
+        return null;
+      }
+    }
+
+    function storeConsent(value) {
+      try {
+        window.localStorage.setItem(choiceKey, value);
+      } catch {
+        return;
+      }
+    }
+
+    function ensureGtagScript() {
+      if (!allowedHost || document.getElementById(scriptId)) return;
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+      document.head.appendChild(script);
+    }
+
+    function grantAnalytics() {
+      window.gtag("consent", "update", {
+        analytics_storage: "granted",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied"
+      });
+      if (!allowedHost) return;
+      window.gtag("js", new Date());
+      window.gtag("config", measurementId, {
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false
+      });
+      ensureGtagScript();
+    }
+
+    function denyAnalytics() {
+      window.gtag("consent", "update", {
+        analytics_storage: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied"
+      });
+    }
+
+    function hideBanner() {
+      if (banner instanceof HTMLElement) banner.hidden = true;
+    }
+
+    function showBanner() {
+      if (banner instanceof HTMLElement) banner.hidden = false;
+    }
+
+    function eventParam(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9_-]+/g, "_")
+        .replace(/^_+|_+$/g, "")
+        .slice(0, 64);
+    }
+
+    window.bloxbgmTrackEvent = (eventName, params = {}) => {
+      if (!allowedHost || consentState() !== "granted") return;
+      const safeName = eventParam(eventName);
+      if (!safeName) return;
+      const safeParams = {};
+      for (const [key, value] of Object.entries(params)) {
+        const safeKey = eventParam(key);
+        if (safeKey) safeParams[safeKey] = eventParam(value);
+      }
+      window.gtag("event", safeName, { ...safeParams, transport_type: "beacon" });
+    };
+
+    function handleAnalyticsClick(event) {
+      const target = event.target instanceof Element ? event.target.closest("[data-analytics-event]") : null;
+      if (!(target instanceof HTMLElement) || trackedEvents.has(target)) return;
+      trackedEvents.add(target);
+      window.setTimeout(() => trackedEvents.delete(target), 1000);
+      window.bloxbgmTrackEvent(target.dataset.analyticsEvent, {
+        content_type: target.dataset.analyticsContentType,
+        content_slug: target.dataset.analyticsContentSlug,
+        placement: target.dataset.analyticsPlacement
+      });
+    }
+
+    acceptButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        storeConsent("granted");
+        grantAnalytics();
+        hideBanner();
+      });
+    });
+
+    rejectButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        storeConsent("denied");
+        denyAnalytics();
+        hideBanner();
+      });
+    });
+
+    reopenButtons.forEach((button) => {
+      button.addEventListener("click", showBanner);
+    });
+
+    document.addEventListener("click", handleAnalyticsClick);
+
+    const currentChoice = consentState();
+    if (currentChoice === "granted") {
+      grantAnalytics();
+    } else if (currentChoice === "denied") {
+      denyAnalytics();
+    } else {
+      showBanner();
+    }
+  })();
+</script>

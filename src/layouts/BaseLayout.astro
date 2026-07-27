@@ -1,5 +1,6 @@
 ---
 import "../styles.css";
+import AnalyticsConsent from "@/components/AnalyticsConsent.astro";
 import { site } from "@/data/site";
 
 interface Props {
@@ -38,5 +39,6 @@ const {
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <slot />
+    <AnalyticsConsent />
   </body>
 </html>

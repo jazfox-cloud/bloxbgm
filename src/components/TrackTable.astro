@@ -7,9 +7,13 @@ interface Props {
 }
 
 const { tracks, compact = false } = Astro.props;
+
+function trackSlug(track: Track) {
+  return `${track.genre}-${track.status}`;
+}
 ---
 
-<div class="panel overflow-hidden rounded-lg" data-track-widget>
+<div class="panel overflow-hidden rounded-lg" data-track-widget data-analytics-placement={compact ? "compact_table" : "track_table"}>
   <div class="grid gap-3 border-b border-white/10 p-4 md:grid-cols-[1fr_180px_160px]">
     <label class="block">
       <span class="sr-only">Search tracks</span>
@@ -53,6 +57,7 @@ const { tracks, compact = false } = Astro.props;
           <tr
             class="border-t border-white/8 align-top"
             data-track-row
+            data-track-slug={trackSlug(track)}
             data-search={`${track.title} ${track.artist} ${track.id} ${track.genre} ${track.mood.join(" ")} ${track.bestFor.join(" ")}`.toLowerCase()}
             data-genre={track.genre}
             data-status={track.status}
@@ -73,7 +78,12 @@ const { tracks, compact = false } = Astro.props;
             </td>
             {!compact && <td class="px-4 py-4 text-white/64">{track.bestFor.join(", ")}</td>}
             <td class="px-4 py-4">
-              <button class="rounded-md border border-white/12 px-3 py-2 text-xs font-black text-white transition hover:border-pulse hover:text-pulse" type="button" data-copy-id={track.id}>
+              <button
+                class="rounded-md border border-white/12 px-3 py-2 text-xs font-black text-white transition hover:border-pulse hover:text-pulse"
+                type="button"
+                data-copy-id={track.id}
+                data-copy-slug={trackSlug(track)}
+              >
                 Copy ID
               </button>
             </td>
@@ -155,6 +165,13 @@ const { tracks, compact = false } = Astro.props;
           const id = button.dataset.copyId;
           if (!id) return;
           const copied = await copyText(id);
+          if (copied) {
+            window.bloxbgmTrackEvent?.("copy_code", {
+              content_type: "music_id",
+              content_slug: button.dataset.copySlug,
+              placement: widget.dataset.analyticsPlacement
+            });
+          }
           const original = button.textContent;
           button.textContent = copied ? "Copied" : "Copy failed";
           window.setTimeout(() => {
